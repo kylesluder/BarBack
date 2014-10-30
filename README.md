@@ -3,6 +3,11 @@ BarBack
 
 Puts the titlebar back on your Xcode windows.
 
+How to Install
+---
+
+Build the BarBack target and copy `BarBack.xcplugin` to `~/Library/Application Support/Developer/Shared/Xcode/Plug-Ins`.
+
 Known Issues
 ---
 
