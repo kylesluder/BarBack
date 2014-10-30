@@ -3,6 +3,8 @@ BarBack
 
 Puts the titlebar back on your Xcode windows.
 
+![An Xcode window with a titlebar.](BarBack.png)
+
 How to Install
 ---
 
