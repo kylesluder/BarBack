@@ -38,11 +38,6 @@ typedef NS_ENUM(NSInteger, NSWindowTitleVisibility) {
 - (NSWindow *)window;
 @end
 
-//static void _BarBack_windowDidLoad(IDEWorkspaceWindowController *self, SEL _cmd) {
-//    [self _BarBack_windowDidLoad];
-//    self.window.titleVisibility = NSWindowTitleVisible;
-//}
-
 @implementation BBBarBackPlugin
 
 static NSMutableArray *swizzleUndoers;
