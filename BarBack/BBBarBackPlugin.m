@@ -38,6 +38,11 @@ typedef NS_ENUM(NSInteger, NSWindowTitleVisibility) {
 - (NSWindow *)window;
 @end
 
+@interface IDERunPauseContinueToolbarButton : NSObject
+- (NSWindow *)window;
+- (void)viewWillMoveToWindow:(NSWindow *)window;
+@end
+
 @implementation BBBarBackPlugin
 
 static NSMutableArray *swizzleUndoers;
@@ -98,6 +103,17 @@ static NSString *BBCouldntSwizzleMethodException = @"com.ksluder.BarBack.BBCould
             return imp_implementationWithBlock(^(__unsafe_unretained IDEWorkspaceWindowController *wc){
                 originalWindowDidLoad(wc, @selector(windowDidLoad));
                 wc.window.titleVisibility = NSWindowTitleVisible;
+            });
+        }];
+        
+        [self _BarBack_swizzleMethodNamed:@selector(viewWillMoveToWindow:) ofClassNamed:@"IDERunPauseContinueToolbarButton" withImplementationFactory:^IMP(IMP originalImplementation) {
+            void (*originalViewWillMoveToWindow)(__unsafe_unretained id, SEL, NSWindow *) = (typeof(originalViewWillMoveToWindow))originalImplementation;
+            return imp_implementationWithBlock(^(__unsafe_unretained IDERunPauseContinueToolbarButton *button, NSWindow *newWindow){
+                // If the title bar is visible, adding the debugger bar to the window (because the user choose the Run command) causes toolbar buttons to get reparented to a new view in the same window.
+                // This apparently exposes a bug somewhere in IDERunPauseContinueToolbarButton. -_buttonIsMovingToWindowController: unregisters some KVO observers, then reregisters them on objects derived from the new window's window controller. Perhaps it's double-unregistering?
+                // Either way, the work it's doing is unnecessary when moving to a new parent view within the same window, so we can just squelch it here.
+                if (!newWindow || [button window] != newWindow)
+                    originalViewWillMoveToWindow(button, @selector(viewWillMoveToWindow:), newWindow);
             });
         }];
         
