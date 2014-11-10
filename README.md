@@ -10,6 +10,13 @@ How to Install
 
 Build the BarBack target and copy `BarBack.xcplugin` to `~/Library/Application Support/Developer/Shared/Xcode/Plug-Ins`.
 
+What's New
+---
+
+### v. 1.0.1
+
+- Hopefully no more crashing when Running (Issue #1)
+
 Known Issues
 ---
 
